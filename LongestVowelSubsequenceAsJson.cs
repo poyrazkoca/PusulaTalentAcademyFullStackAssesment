@@ -5,58 +5,58 @@ using System.Collections.Generic;
 public static class LongestVowelSubsequence
 {
     /// <summary>
-    /// Finds the longest consecutive vowel subsequence in each word of a given list
-    /// and returns the results in a JSON string.
+    /// Verilen bir kelime listesindeki her kelimenin ardışık en uzun sesli harf alt dizisini bulur
+    /// ve sonuçları JSON formatında döndürür.
     /// </summary>
-    /// <param name="words">A list of strings to process.</param>
-    /// <returns>A JSON string containing the word, the longest vowel sequence, and its length.</returns>
+    /// <param name="words">İşlenecek kelime listesi.</param>
+    /// <returns>Kelime, en uzun sesli harf dizisi ve uzunluğunu içeren JSON string.</returns>
     public static string LongestVowelSubsequenceAsJson(List<string> words)
     {
-        // Define the set of vowels for easy lookup.
+    // Sesli harfleri kolayca kontrol etmek için küme olarak tanımla.
         HashSet<char> vowels = new HashSet<char> { 'a', 'e', 'i', 'o', 'u' };
 
-        // Create a list to hold the results for each word.
+    // Her kelime için sonuçları tutacak listeyi oluştur.
         var results = new List<object>();
 
-        // Iterate through each word in the input list.
+    // Girdi listesindeki her kelimeyi sırayla işle.
         foreach (var word in words)
         {
             string longestSequence = "";
             string currentSequence = "";
 
-            // Check if the word is not null or empty before processing.
+            // Kelime null veya boş değilse işle.
             if (!string.IsNullOrEmpty(word))
             {
-                // Iterate through each character in the word.
+                // Kelimedeki her karakteri sırayla işle.
                 foreach (char c in word.ToLower())
                 {
-                    // Check if the character is a vowel.
+                    // Karakter sesli harf mi kontrol et.
                     if (vowels.Contains(c))
                     {
-                        // Append the vowel to the current sequence.
+                        // Sesli harfi mevcut diziye ekle.
                         currentSequence += c;
                     }
                     else
                     {
-                        // If the character is not a vowel, the sequence of consecutive vowels is broken.
-                        // Check if the current sequence is the longest found so far for this word.
+                        // Karakter sesli harf değilse, ardışık sesli harf dizisi bozuldu.
+                        // Mevcut dizi, şimdiye kadar bulunan en uzun dizi mi kontrol et.
                         if (currentSequence.Length > longestSequence.Length)
                         {
                             longestSequence = currentSequence;
                         }
-                        // Reset the current sequence for the next set of vowels.
+                        // Sonraki sesli harfler için mevcut diziyi sıfırla.
                         currentSequence = "";
                     }
                 }
                 
-                // After the loop, a final check is needed for sequences ending at the end of the word.
+                // Döngüden sonra, kelimenin sonunda biten diziler için son bir kontrol yap.
                 if (currentSequence.Length > longestSequence.Length)
                 {
                     longestSequence = currentSequence;
                 }
             }
 
-            // Create an anonymous object for the current word's result.
+            // Mevcut kelimenin sonucu için anonim nesne oluştur.
             var result = new
             {
                 word = word,
@@ -64,12 +64,11 @@ public static class LongestVowelSubsequence
                 length = longestSequence.Length
             };
 
-            // Add the result object to the list.
+            // Sonuç nesnesini listeye ekle.
             results.Add(result);
         }
 
-        // Serialize the list of result objects into a JSON string.
-        // Use JsonSerializerOptions for pretty printing if needed, but the default is concise.
+    // Sonuç nesneleri listesini JSON string'e çevir.
         return JsonSerializer.Serialize(results, new JsonSerializerOptions { WriteIndented = false });
     }
 }

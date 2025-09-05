@@ -6,14 +6,14 @@ using System.Text.Json;
 public static class FilterEmployees
 {
     /// <summary>
-    /// Filters a collection of employee tuples based on specific criteria,
-    /// performs salary calculations, and returns the result as a JSON string.
+    /// Personel tuple koleksiyonunu belirli kriterlere göre filtreler,
+    /// maaş hesaplamalarını yapar ve sonucu JSON string olarak döndürür.
     /// </summary>
-    /// <param name="employees">A collection of employee tuples containing Name, Age, Department, Salary, and HireDate.</param>
-    /// <returns>A JSON string with the filtered employee names, and the total, average, lowest, and highest salaries, and the employee count.</returns>
+    /// <param name="employees">Ad, Yaş, Departman, Maaş ve İşe Giriş Tarihi içeren personel tuple koleksiyonu.</param>
+    /// <returns>Filtrelenmiş personel isimleri, toplam, ortalama, en düşük ve en yüksek maaş ile çalışan sayısını içeren JSON string.</returns>
     public static string FilterEmployees(IEnumerable<(string Name, int Age, string Department, decimal Salary, DateTime HireDate)> employees)
     {
-        // 1. Filter the employees based on the specified criteria.
+    // 1. Personelleri belirtilen kriterlere göre filtrele.
         var filteredEmployees = employees
             .Where(e => e.Age >= 25 && e.Age <= 40)
             .Where(e => e.Department == "IT" || e.Department == "Finance")
@@ -21,7 +21,7 @@ public static class FilterEmployees
             .Where(e => e.HireDate.Year > 2017)
             .ToList(); // Convert to a list to avoid multiple enumerations.
 
-        // 2. Define a data structure to hold the result.
+    // 2. Sonucu tutacak veri yapısını tanımla.
         var result = new
         {
             Names = new List<string>(),
@@ -32,24 +32,24 @@ public static class FilterEmployees
             Count = 0
         };
 
-        // 3. Perform calculations and sorting only if there are filtered employees.
+    // 3. Sadece filtrelenmiş personel varsa hesaplama ve sıralama yap.
         if (filteredEmployees.Count > 0)
         {
-            // 3a. Sort the names first by length (descending) and then alphabetically (ascending).
+            // 3a. İsimleri önce uzunluğa göre azalan, sonra alfabetik olarak artan şekilde sırala.
             var sortedNames = filteredEmployees
                 .OrderByDescending(e => e.Name.Length)
                 .ThenBy(e => e.Name)
                 .Select(e => e.Name)
                 .ToList();
 
-            // 3b. Perform salary calculations.
+            // 3b. Maaş hesaplamalarını yap.
             var totalSalary = filteredEmployees.Sum(e => e.Salary);
             var averageSalary = filteredEmployees.Average(e => e.Salary);
             var minSalary = filteredEmployees.Min(e => e.Salary);
             var maxSalary = filteredEmployees.Max(e => e.Salary);
             var count = filteredEmployees.Count;
 
-            // 3c. Update the result object with the calculated values.
+            // 3c. Hesaplanan değerlerle sonuç nesnesini güncelle.
             result = new
             {
                 Names = sortedNames,
@@ -61,7 +61,7 @@ public static class FilterEmployees
             };
         }
 
-        // 4. Serialize the result object to a JSON string.
+    // 4. Sonuç nesnesini JSON string'e çevir.
         var jsonOptions = new JsonSerializerOptions
         {
             WriteIndented = false
