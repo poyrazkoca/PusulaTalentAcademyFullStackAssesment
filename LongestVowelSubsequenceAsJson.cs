@@ -4,59 +4,53 @@ using System.Collections.Generic;
 
 public static class LongestVowelSubsequence
 {
-    /// <summary>
-    /// Verilen bir kelime listesindeki her kelimenin ardışık en uzun sesli harf alt dizisini bulur
-    /// ve sonuçları JSON formatında döndürür.
-    /// </summary>
-    /// <param name="words">İşlenecek kelime listesi.</param>
-    /// <returns>Kelime, en uzun sesli harf dizisi ve uzunluğunu içeren JSON string.</returns>
     public static string LongestVowelSubsequenceAsJson(List<string> words)
     {
-    // Sesli harfleri kolayca kontrol etmek için küme olarak tanımla.
+    // sesli harfleri kolayca kontrol etmek için küme olarak tanımladım.
         HashSet<char> vowels = new HashSet<char> { 'a', 'e', 'i', 'o', 'u' };
 
-    // Her kelime için sonuçları tutacak listeyi oluştur.
+    // her kelime için sonuçları tutacak listeyi oluşturdum.
         var results = new List<object>();
 
-    // Girdi listesindeki her kelimeyi sırayla işle.
+    // girdi listesindeki her kelimeyi sırayla işledim.
         foreach (var word in words)
         {
             string longestSequence = "";
             string currentSequence = "";
 
-            // Kelime null veya boş değilse işle.
+            // kelime null veya boş değilse işledim.
             if (!string.IsNullOrEmpty(word))
             {
-                // Kelimedeki her karakteri sırayla işle.
+                // kelimedeki her karakteri sırayla işledim.
                 foreach (char c in word.ToLower())
                 {
-                    // Karakter sesli harf mi kontrol et.
+                    // karakter sesli harf mi kontrol ettim.
                     if (vowels.Contains(c))
                     {
-                        // Sesli harfi mevcut diziye ekle.
+                        // sesli harfi mevcut diziye ekledim.
                         currentSequence += c;
                     }
                     else
                     {
-                        // Karakter sesli harf değilse, ardışık sesli harf dizisi bozuldu.
-                        // Mevcut dizi, şimdiye kadar bulunan en uzun dizi mi kontrol et.
+                        // karakter sesli harf değilse, ardışık sesli harf dizisini bozdum.
+                        // mevcut dizi, şimdiye kadar bulunan en uzun dizi mi kontrol ettim.
                         if (currentSequence.Length > longestSequence.Length)
                         {
                             longestSequence = currentSequence;
                         }
-                        // Sonraki sesli harfler için mevcut diziyi sıfırla.
+                        // sonraki sesli harfler için mevcut diziyi sıfırladım.
                         currentSequence = "";
                     }
                 }
                 
-                // Döngüden sonra, kelimenin sonunda biten diziler için son bir kontrol yap.
+                // döngüden sonra, kelimenin sonunda biten diziler için son bir kontrol yaptım.
                 if (currentSequence.Length > longestSequence.Length)
                 {
                     longestSequence = currentSequence;
                 }
             }
 
-            // Mevcut kelimenin sonucu için anonim nesne oluştur.
+            // mevcut kelimenin sonucu için anonim nesne oluşturdum.
             var result = new
             {
                 word = word,
@@ -64,11 +58,11 @@ public static class LongestVowelSubsequence
                 length = longestSequence.Length
             };
 
-            // Sonuç nesnesini listeye ekle.
+            // sonuç nesnesini listeye ekledim.
             results.Add(result);
         }
 
-    // Sonuç nesneleri listesini JSON string'e çevir.
+    // sonuç nesneleri listesini JSON string'e çevirdim.
         return JsonSerializer.Serialize(results, new JsonSerializerOptions { WriteIndented = false });
     }
 }

@@ -2,35 +2,26 @@ using System.Linq;
 using System.Text.Json;
 using System.Collections.Generic;
 
-/// <summary>
-/// En büyük artan alt diziyi bulan metodu içeren sınıf.
-/// </summary>
 public static class SubarrayFinder
 {
-    /// <summary>
-    /// Bir tamsayı listesindeki ardışık artan alt dizilerden toplamı en büyük olanı bulur.
-    /// Bulunan alt dizi JSON formatında döndürülür.
-    /// </summary>
-    /// <param name="numbers">Analiz edilecek tamsayı listesi.</param>
-    /// <returns>En büyük artan alt diziyi JSON formatında döndüren string.</returns>
     public static string MaxIncreasingSubarrayAsJson(List<int> numbers)
     {
-    // Null veya boş liste durumunu kontrol et.
+    // null veya boş liste durumunu kontrol ettim.
         if (numbers == null || numbers.Count == 0)
         {
             return JsonSerializer.Serialize(new List<int>());
         }
 
-    // Mevcut ve maksimum alt dizileri ve bunların toplamlarını takip etmek için değişkenleri başlat.
+    // mevcut ve maksimum alt dizileri ve bunların toplamlarını takip etmek için değişkenleri başlattım.
         List<int> currentSubsequence = new List<int> { numbers[0] };
         List<int> maxSubsequence = new List<int> { numbers[0] };
         long currentSum = numbers[0];
         long maxSum = numbers[0];
 
-    // Listenin ikinci elemanından başlayarak döngüye gir.
+    // listenin ikinci elemanından başlayarak döngüye soktum.
         for (int i = 1; i < numbers.Count; i++)
         {
-            // Eğer mevcut sayı bir önceki sayıdan büyükse, artan dizinin parçasıdır.
+            // eğer mevcut sayı bir önceki sayıdan büyükse, artan dizinin parçası olarak algılattım.
             if (numbers[i] > numbers[i - 1])
             {
                 currentSubsequence.Add(numbers[i]);
@@ -38,26 +29,26 @@ public static class SubarrayFinder
             }
             else
             {
-                // Artan dizi bozuldu. Mevcut dizinin toplamını şimdiye kadar bulunan maksimum toplam ile karşılaştır.
+                // artan dizi bozulunca mevcut dizinin toplamını şimdiye kadar bulunan maksimum toplam ile karşılaştırdım.
                 if (currentSum > maxSum)
                 {
                     maxSum = currentSum;
-                    maxSubsequence = new List<int>(currentSubsequence); // Create a new list to store the winning sequence.
+                    maxSubsequence = new List<int>(currentSubsequence); // kazanan diziyi saklamak için yeni bir liste oluşturdum.
                 }
 
-                // Yeni alt dizi için mevcut dizi ve toplamı sıfırla.
+                // yeni alt dizi için mevcut dizi ve toplamı sıfırladım.
                 currentSubsequence = new List<int> { numbers[i] };
                 currentSum = numbers[i];
             }
         }
 
-    // Döngüden sonra, son alt dizi için son bir kontrol yap.
+    // döngüden sonra, son alt dizi için son bir kontrol yaptım.
         if (currentSum > maxSum)
         {
             maxSubsequence = currentSubsequence;
         }
 
-    // Sonuç listesini JSON formatında string'e çevir.
+    // sonuç listesini JSON formatında string'e çevirdim.
         return JsonSerializer.Serialize(maxSubsequence);
     }
 }

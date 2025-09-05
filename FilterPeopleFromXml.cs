@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public static class Solution
 {
-    // XML'den alınan Person verisini temsil eden sınıf.
+    // XML'den alınan Person verisini temsil eden sınıfı oluşturdum.
     public class Person
     {
         public string Name { get; set; }
@@ -16,7 +16,7 @@ public static class Solution
         public DateTime HireDate { get; set; }
     }
 
-    // JSON formatında çıktı verisini temsil eden sınıf.
+    // JSON formatında çıktı verisini temsil eden sınıfı oluşturdum.
     public class FilteredPeopleData
     {
         public List<string> Names { get; set; }
@@ -26,19 +26,14 @@ public static class Solution
         public int Count { get; set; }
     }
 
-    /// <summary>
-    /// XML verisini parse ederek belirli kriterlere uyan kişileri bulur ve özetini JSON formatında döndürür.
-    /// </summary>
-    /// <param name="xmlData">Kişi bilgilerini içeren XML veri stringi.</param>
-    /// <returns>Filtrelenmiş kişi isimleri, toplam maaş, ortalama maaş, maksimum maaş ve kişi sayısını içeren JSON string.</returns>
     public static string FilterPeopleFromXml(string xmlData)
     {
         try
         {
-            // XML verisini stringden parse et.
+            // XML verisini stringden parse ettim.
             XDocument doc = XDocument.Parse(xmlData);
 
-            // LINQ to XML kullanarak Person elemanlarını sorgula.
+            // LINQ to XML kullanarak Person elemanlarını sorgulattım.
             var filteredPeople = doc.Descendants("Person")
                 .Select(personElement => new Person
                 {
@@ -55,7 +50,7 @@ public static class Solution
                     person.HireDate.Year < 2019)
                 .ToList();
 
-            // Çıktı nesnesini varsayılan değerlerle başlat.
+            // çıktı nesnesini varsayılan değerlerle başlattım.
             var outputData = new FilteredPeopleData
             {
                 Names = new List<string>(),
@@ -65,31 +60,31 @@ public static class Solution
                 Count = 0
             };
 
-            // Hiç kişi bulunup bulunmadığını kontrol et, boş koleksiyonlarda hata olmaması için.
+            // boş koleksiyonlarda hata olmaması için hiç kişi bulunup bulunmadığını kontrol ettim.
             if (filteredPeople.Any())
             {
-                // İsimleri alfabetik olarak sırala.
+                // isimleri alfabetik olarak sıraladım.
                 outputData.Names = filteredPeople
                     .Select(p => p.Name)
                     .OrderBy(name => name)
                     .ToList();
 
-                // Toplam, ortalama ve maksimum maaşı hesapla.
+                // toplam, ortalama ve maksimum maaşı hesapladım.
                 outputData.TotalSalary = filteredPeople.Sum(p => p.Salary);
                 outputData.AverageSalary = filteredPeople.Average(p => p.Salary);
                 outputData.MaxSalary = filteredPeople.Max(p => p.Salary);
                 outputData.Count = filteredPeople.Count;
             }
 
-            // Çıktı nesnesini JSON string'e çevir.
+            // çıktı nesnesini JSON string'e çevirdim.
             var options = new JsonSerializerOptions { WriteIndented = false };
             return JsonSerializer.Serialize(outputData, options);
         }
         catch (Exception ex)
         {
-            // Olası parse hatalarını yakala.
+            // olası parse hatalarını yakalattım.
             Console.WriteLine($"Bir hata oluştu: {ex.Message}");
-            // Hata durumunda boş JSON nesnesi döndür.
+            // hatalı data durumunda boş JSON nesnesi döndürdüm.
             return "{\"Names\":[],\"TotalSalary\":0,\"AverageSalary\":0,\"MaxSalary\":0,\"Count\":0}";
         }
     }
